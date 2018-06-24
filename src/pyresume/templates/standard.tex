@@ -39,6 +39,11 @@
 }
 
 \begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Header
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \centerline{
   \LARGE\textbf{ {{ basic.name }} }
 }
@@ -79,14 +84,27 @@
   {% endif %}
 \end{tabu*}
 {% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Objective
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 {% if objective is defined %}
 \sectionheader{Objective}
+\bigskip
+
 {{ objective }}
+
 \bigskip
 {% endif %}
-{% if (skills is defined and
-       skills|length > 0) %}
-\sectionheader{Technical Skills Summary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Skills
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{% if (skills is defined and skills|length > 0) %}
+\sectionheader{Technical Skills}
+\bigskip
 
 \noindent\begin{tabu} to \textwidth { @{} X[2,l] X[5,p] }
 
@@ -99,13 +117,19 @@
 {{category.category}} & {{ category.skills|join(', ') }} \\
     {% endif %}
   {% endfor %}
-
 \end{tabu}
+
 \bigskip
 {% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Experience
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 {% if experience is defined %}
 \sectionheader{Experience}
-  {% for job in experience %}
+
+{% for job in experience %}
 \noindent{}\begin{tabu} to \textwidth {@{} X[1,l] X[c] X[r]}
   \ &\ &\ \\
   \large{}\bf{} {{job.company}} & \multicolumn{2}{@{} l}{ {% if 'url' in job %} {{job.url}} {% else %}\ {% endif %}} \\
@@ -113,19 +137,26 @@
   \multicolumn{2}{@{} l}{\bf{}\indent{}{{title.name}} } & {{title.startdate}} - {{title.enddate}} \\
     {% endfor %}
 \end{tabu}
-    {% if job.projects|length > 0 %}
-  \begin{myitemize}
-      {% for project in job.projects %}
-    \item {{project}}
-      {% endfor %}
-  \end{myitemize}
-    {% endif %}
-  \medskip
-  {% endfor %}
-{% endif %}
-{% if education is defined %}
 
+{% if job.projects|length > 0 %}
+\begin{myitemize}
+  {% for project in job.projects %}
+  \item {{project}}
+  {% endfor %}
+\end{myitemize}
+{% endif %}
+
+\medskip
+{% endfor %}
+{% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Education
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{% if education is defined %}
 \sectionheader{Education}
+\bigskip
 
 {% for school in education %}
 \centerline{\large\bf
@@ -134,14 +165,12 @@
   {{school.startdate}} - {{school.enddate}}
   }
 \smallskip
-  {% if ("degrees" in school and
-         school.degrees|length > 0) %}
+  {% if ("degrees" in school and school.degrees|length > 0) %}
     {% for degree in school.degrees %}
 \noindent\textit{ {{degree}} }\\
     {% endfor %}
   {% endif %}
-  {% if ("achievements" in school and
-         school.achievements|length > 0) %}
+  {% if ("achievements" in school and school.achievements|length > 0) %}
     {% for achievement in school.achievements %}
 \indent\textit{ {{achievement}} }
     {% endfor %}
@@ -150,22 +179,74 @@
 \indent GPA: {{ school.gpa }}
   {% endif %}
 {% endfor %}
+
 {% endif %}
-{% if (activities is defined and
-       activities|length > 0) %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Certifications
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{% if certifications is defined %}
+\sectionheader{Certifications}
+\bigskip
+
+{% for certification in certifications %}
+\centerline{\large\bf
+  {{ certification.name }}
+  \hfill
+  {{ certification.date }}
+}
+\smallskip
+\noindent\textit{ {{ certification.organization }} }\\
+{% endfor %}
+
+{% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Activities
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{% if (activities is defined and activities|length > 0) %}
 \sectionheader{Activities}
-  {% for activity in activities %}
+
+{% for activity in activities %}
 \centerline{\large\bf
   {{ activity.name }}
   \hfill
   {{activity.startdate}} - {{activity.enddate}}
 }
-  {% endfor %}
+{% endfor %}
+
 \bigskip
 {% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Projects
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{% if (projects is defined and projects|length > 0) %}
+\sectionheader{Projects}
+\bigskip
+
+{% for project in projects %}
+\noindent{}
+{\large\bf {{ project.name }}, }
+{% if 'url' in project %}\href{ {{ project.url }} }{ {{ project.url }} }{% else %}\{% endif %}
+\medskip \\
+{{ project.description }}
+\bigskip
+{% endfor %}
+
+{% endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 {% if references is defined %}
   {% if references|length > 0 %}
 \sectionheader{References}
+
     {% for reference in references %}
 \centerline{\large\bf
   {{ reference.name }}
@@ -177,4 +258,5 @@
 \noindent{\bf Available on Request}
   {% endif %}
 {% endif %}
+
 \end{document}
